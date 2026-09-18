@@ -22,6 +22,7 @@ made silently.
 | **Contact page** (`contact.html`) | ⚠️ built with placeholder form copy — see `content/contact.md` |
 | Contact form handler | ⏳ not wired (Netlify / Formspree / custom) |
 | Team portraits | ⏳ awaiting images (monogram placeholders in use) |
+| Photography | ❌ **none** — see `assets/img/README.md` for the drop-in slots |
 
 The build environment's network policy blocks all outbound traffic to
 `tribecaoutcomes.com`, so the live site could not be scraped from here. Copy is

@@ -1,0 +1,86 @@
+/* ==========================================================================
+   Figurative artwork. Inline SVG, so it inherits the theme's currentColor and
+   works in light and dark without a second asset. Every piece here is a
+   DESIGN placeholder: when real photography arrives it replaces these
+   wholesale — see assets/img/README.md for the swap.
+   ========================================================================== */
+
+/* --- Hero: two-column, art beside the copy ------------------------------ */
+.hero--split .hero__grid {
+  display: grid;
+  gap: var(--sp-7);
+  align-items: center;
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 62rem) {
+  .hero--split .hero__grid {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: var(--sp-8);
+  }
+}
+
+/* --- The art frame ------------------------------------------------------- */
+.art {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background:
+    radial-gradient(130% 110% at 20% 12%, color-mix(in oklab, var(--accent) 20%, transparent), transparent 62%),
+    linear-gradient(160deg, var(--bg-raised), var(--bg-sunk));
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-lg);
+}
+.art svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* Colour roles inside the artwork. */
+.art .a-line   { stroke: var(--accent); fill: none; }
+.art .a-faint  { stroke: var(--accent); fill: none; opacity: 0.28; }
+.art .a-dot    { fill: var(--accent); }
+.art .a-dot-hi { fill: var(--highlight); }
+.art .a-wash   { fill: var(--accent); opacity: 0.07; }
+.art .a-panel  {
+  fill: var(--bg-raised);
+  stroke: var(--line-strong);
+  opacity: 0.55;
+}
+
+/* Slow drift, so the page feels alive without anything bouncing. */
+@media (prefers-reduced-motion: no-preference) {
+  .a-drift  { animation: art-drift 18s var(--ease-in-out) infinite alternate; }
+  .a-drift2 { animation: art-drift 24s var(--ease-in-out) infinite alternate-reverse; }
+  .a-pulse  { animation: art-pulse 6s var(--ease-in-out) infinite; }
+}
+@keyframes art-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(0, -14px, 0); }
+}
+@keyframes art-pulse {
+  0%, 100% { opacity: 0.25; }
+  50%      { opacity: 0.85; }
+}
+
+/* --- Full-bleed texture band -------------------------------------------- */
+.band-art {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.5;
+}
+.band-art svg { width: 100%; height: 100%; }
+.has-band-art { position: relative; isolation: isolate; }
+.has-band-art > .container { position: relative; z-index: 1; }
+
+/* --- Figure slot: where a real photograph drops in ----------------------- */
+.media-slot {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg-sunk);
+  border: 1px solid var(--line);
+  aspect-ratio: 3 / 2;
+}
+.media-slot img { width: 100%; height: 100%; object-fit: cover; }
