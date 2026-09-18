@@ -1,0 +1,74 @@
+/* ==========================================================================
+   Layout primitives — containers, sections, grids, stacks.
+   ========================================================================== */
+
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.container--tight { max-width: var(--container-tight); }
+.container--wide  { max-width: 84rem; }
+
+/* Vertical rhythm. Every band of the page is a .section. */
+.section { padding-block: var(--section-y); }
+.section--sm { padding-block: calc(var(--section-y) * 0.6); }
+.section--lg { padding-block: calc(var(--section-y) * 1.35); }
+.section--sunk { background: var(--bg-sunk); }
+.section--inverse {
+  background: var(--bg-inverse);
+  color: var(--text-on-inverse);
+}
+.section--inverse h1, .section--inverse h2,
+.section--inverse h3, .section--inverse h4 { color: var(--text-on-inverse); }
+.section--inverse .lede,
+.section--inverse .text-muted { color: var(--text-on-inverse-muted); }
+.section--inverse a { color: var(--ink-200); }
+.section--inverse hr { border-color: var(--line-inverse); }
+
+/* Hairline between adjacent same-colour sections, so bands stay legible. */
+.section--ruled { border-top: 1px solid var(--line); }
+
+/* --- Stack: uniform vertical spacing between siblings ------------------- */
+.stack > * + * { margin-top: var(--flow, var(--sp-4)); }
+.stack--sm { --flow: var(--sp-3); }
+.stack--lg { --flow: var(--sp-6); }
+.stack--xl { --flow: var(--sp-7); }
+
+/* --- Grid --------------------------------------------------------------- */
+.grid {
+  display: grid;
+  gap: var(--grid-gap, var(--sp-6));
+}
+.grid--2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); }
+.grid--3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); }
+.grid--4 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); }
+
+/* Asymmetric editorial split: sticky label column + content column. */
+.grid--split {
+  grid-template-columns: 1fr;
+  gap: var(--sp-6);
+}
+@media (min-width: 60rem) {
+  .grid--split {
+    grid-template-columns: minmax(14rem, 22rem) 1fr;
+    gap: var(--sp-8);
+  }
+  .grid--split > .sticky-label { position: sticky; top: 7rem; align-self: start; }
+}
+
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  align-items: center;
+}
+.cluster--between { justify-content: space-between; }
+
+/* --- Measure + alignment helpers ---------------------------------------- */
+.measure { max-width: var(--measure); }
+.measure--narrow { max-width: var(--measure-narrow); }
+.center { margin-inline: auto; }
+.text-center { text-align: center; }
+.text-muted { color: var(--text-muted); }
