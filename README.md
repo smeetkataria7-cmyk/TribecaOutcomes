@@ -18,12 +18,29 @@ made silently.
 | --- | --- |
 | Design system (tokens, base, layout, components) | ✅ built |
 | `styleguide.html` specimen page | ✅ built |
-| Page templates (home, contact, …) | ⏳ blocked on source content |
-| Real copy | ⏳ **needed from the client** |
+| **Home page** (`index.html`) | ✅ built, copy verified verbatim |
+| Contact page | ⏳ awaiting copy |
+| Team portraits | ⏳ awaiting images (monogram placeholders in use) |
 
 The build environment's network policy blocks all outbound traffic to
-`tribecaoutcomes.com`, so the live site could not be scraped from here. The
-verbatim copy has to be supplied directly — see *Getting the content in* below.
+`tribecaoutcomes.com`, so the live site could not be scraped from here. Copy is
+supplied by the client and lands in `content/` — see *Getting the content in*.
+
+## Verifying the copy
+
+`index.html` is checked against `content/home.md` mechanically, not by eye —
+the page is rendered in headless Chromium and every supplied string is asserted
+present in `document.body.innerText`, which reflects `text-transform`, so a
+stylistic uppercase that would alter how a word renders is caught. The check
+also lists any on-page text *not* in the supplied copy, so invented wording
+cannot slip in unnoticed. It caught two real defects on the first run: the
+footer rendering the brand as `TRIBECAOUTCOMES`, and an `inline-flex` gap
+splitting the logo into "Tribeca Outcomes".
+
+Non-supplied text currently on the home page, all of it structural chrome:
+`Skip to content`, `Menu` (screen-reader only), the `◐` theme glyph, the `→`
+arrow glyphs, the decorative section numerals `01`–`04`, `© <year>
+TribecaOutcomes`, and `Back to top`. Say the word and any of these go.
 
 ## Preview
 

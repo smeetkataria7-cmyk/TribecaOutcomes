@@ -140,9 +140,9 @@
 }
 
 .brand {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.15em;
+  /* Deliberately NOT flex: flex items would split "TribecaOutcomes" into two
+     words, both visually and for innerText / copy-paste. */
+  display: inline-block;
   font-family: var(--font-display);
   font-size: var(--step-1);
   font-weight: 600;
@@ -474,3 +474,145 @@
   /* Stagger children of a revealed group. */
   .js [data-reveal-group] > * { transition-delay: calc(var(--i, 0) * 70ms); }
 }
+
+/* --- Lead list: the oversized, ruled service list in the hero ------------ */
+.list-lead {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: var(--measure);
+}
+.list-lead li {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-4);
+  padding-block: var(--sp-4);
+  border-top: 1px solid var(--line);
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-snug);
+  color: var(--text);
+}
+.list-lead li:last-child { border-bottom: 1px solid var(--line); }
+.list-lead li::before {
+  content: counter(lead, decimal-leading-zero);
+  counter-increment: lead;
+  flex: none;
+  font-family: var(--font-body);
+  font-size: var(--step--1);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wide);
+  color: var(--accent);
+}
+.list-lead { counter-reset: lead; }
+
+/* --- Plain ruled list: dense capability lists inside cards --------------- */
+.list-rule {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.list-rule li {
+  padding-block: var(--sp-3);
+  border-top: 1px solid var(--line);
+  color: var(--text-muted);
+  text-wrap: pretty;
+}
+.list-rule li:first-child { border-top: 0; padding-top: 0; }
+.section--inverse .list-rule li { border-color: var(--line-inverse); color: var(--text-on-inverse-muted); }
+
+/* --- Check list: the "why work with us" reasons -------------------------- */
+.list-check {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--sp-5);
+}
+.list-check li {
+  display: grid;
+  grid-template-columns: 1.5rem 1fr;
+  gap: var(--sp-4);
+  align-items: start;
+  max-width: var(--measure);
+  text-wrap: pretty;
+}
+.list-check li::before {
+  content: "";
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-top: 0.15em;
+  border-radius: var(--radius-pill);
+  background: var(--accent-soft) center / 0.85rem no-repeat;
+  border: 1px solid color-mix(in oklab, var(--accent) 35%, transparent);
+  /* Inline tick, so there is no icon request and nothing to 404. */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%231c6e7e' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 8.5l3.5 3.5 7.5-8'/%3E%3C/svg%3E");
+}
+
+/* --- Question stack: the four "Need …?" lines --------------------------- */
+.question-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--sp-4);
+}
+.question-list li {
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+  padding-left: var(--sp-5);
+  border-left: 2px solid var(--highlight);
+}
+
+/* --- Team ---------------------------------------------------------------- */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  gap: var(--sp-6);
+}
+.team-card { display: flex; flex-direction: column; gap: var(--sp-4); }
+/* Monogram stands in until real portraits are supplied; swap .team-card__avatar
+   for an <img> with the same class and nothing else changes. */
+.team-card__avatar {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  width: 100%;
+  max-width: 9rem;
+  border-radius: var(--radius-pill);
+  background:
+    radial-gradient(120% 120% at 30% 20%, color-mix(in oklab, var(--accent) 22%, transparent), transparent 70%),
+    var(--bg-sunk);
+  border: 1px solid var(--line);
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  object-fit: cover;
+}
+.team-card__name { font-size: var(--step-1); }
+/* No text-transform here: these are supplied copy, and uppercasing them would
+   change how the words actually render. Weight and colour carry the hierarchy. */
+.team-card__role {
+  font-size: var(--step-0);
+  font-weight: 500;
+  letter-spacing: var(--tracking-snug);
+  color: var(--text-muted);
+  text-wrap: pretty;
+}
+
+/* --- Contact detail block ------------------------------------------------ */
+.detail { display: flex; flex-direction: column; gap: var(--sp-1); }
+/* Not uppercased: one of these labels is the brand name itself. */
+.detail__label {
+  font-size: var(--step-0);
+  font-weight: 600;
+  letter-spacing: var(--tracking-snug);
+  color: var(--text-on-inverse);
+}
+.detail__value { font-style: normal; line-height: var(--leading-normal); }
