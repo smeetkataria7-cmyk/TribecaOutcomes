@@ -19,7 +19,8 @@ made silently.
 | Design system (tokens, base, layout, components) | ✅ built |
 | `styleguide.html` specimen page | ✅ built |
 | **Home page** (`index.html`) | ✅ built, copy verified verbatim |
-| Contact page | ⏳ awaiting copy |
+| **Contact page** (`contact.html`) | ⚠️ built with placeholder form copy — see `content/contact.md` |
+| Contact form handler | ⏳ not wired (Netlify / Formspree / custom) |
 | Team portraits | ⏳ awaiting images (monogram placeholders in use) |
 
 The build environment's network policy blocks all outbound traffic to

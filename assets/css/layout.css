@@ -46,13 +46,16 @@
 .grid--4 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); }
 
 /* Asymmetric editorial split: sticky label column + content column. */
+/* minmax(0, …) rather than a bare 1fr: a bare 1fr is minmax(auto, 1fr), so a
+   wide-min-content child (a nested grid, a long unbroken string) can force the
+   track past the viewport instead of shrinking. */
 .grid--split {
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--sp-6);
 }
 @media (min-width: 60rem) {
   .grid--split {
-    grid-template-columns: minmax(14rem, 22rem) 1fr;
+    grid-template-columns: minmax(14rem, 22rem) minmax(0, 1fr);
     gap: var(--sp-8);
   }
   .grid--split > .sticky-label { position: sticky; top: 7rem; align-self: start; }
