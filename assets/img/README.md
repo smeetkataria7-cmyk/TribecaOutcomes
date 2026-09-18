@@ -1,60 +1,57 @@
-# Image slots
+# Images
 
-The site currently ships **no photography**. Nothing here was available: the
-build environment cannot reach tribecaoutcomes.com, and no image files have
-been supplied. What is on the page instead is deliberate placeholder artwork —
-inline SVG that inherits the theme colours — clearly marked in the HTML.
+## Brand colours (sampled from the logo, not guessed)
 
-Every slot below is a one-line swap.
+| Role | Hex | Notes |
+| --- | --- | --- |
+| Navy | `#283282` | The "Tribeca" wordmark. 11.24:1 on white — safe for any text. |
+| Orange | `#fa7b24` | The "Outcomes" wordmark and dot arc. **2.65:1 on white — never put text in it.** Bullets, rules and dots only. |
+| Orange (text) | `#a84e13` | Use when orange must carry words. 5.58:1. |
 
-## 1. Hero artwork → hero photograph
+## 1. Hero photograph — REPLACE THIS
 
-`index.html`, inside `.hero__grid`. Replace the entire `<div class="art">…</div>`
-block with:
+`assets/img/hero-placeholder.jpg` was **cropped out of a screenshot** of the
+live site. It is screenshot-resolution and will look soft on a large display.
 
-```html
-<div class="media-slot"><img src="assets/img/hero.jpg" alt=""></div>
-```
+Replace it with the original file from Squarespace, same filename, and nothing
+else needs to change. To find it: open the live site, right-click the hero
+image → "Save image as…", or pull it from the Squarespace media library at full
+size. Aim for 2400px wide or more.
 
-Use `alt=""` if the image is decorative; write real alt text if it carries
-meaning. Recommended: 1600×1200 or wider, 3:2 or 4:3.
+**If you swap in a different image, re-check the scrim.** White text sits on
+top. The current scrim keeps every hero text block above 6.7:1 against its
+worst pixel; a brighter photo can break that. `assets/css/components.css` →
+`.hero__scrim` controls it.
 
-## 2. Positioning band texture → full-bleed photograph
+## 2. Team portraits
 
-`index.html`, the `.has-band-art` section. The `<div class="band-art">` holds a
-measurement-grid SVG. Swap in an image and keep it behind the text:
-
-```html
-<div class="band-art" aria-hidden="true">
-  <img src="assets/img/band.jpg" alt="" style="width:100%;height:100%;object-fit:cover">
-</div>
-```
-
-Keep it dark or lower `.band-art { opacity }` — white text sits on top and the
-contrast has to hold.
-
-## 3. Team monograms → portraits
-
-`index.html`, each `.team-card`. Replace:
+Each `.team-card` in `index.html` currently shows a monogram. Swap:
 
 ```html
 <div class="team-card__avatar" aria-hidden="true">LS</div>
 ```
 
-with:
+for:
 
 ```html
 <img class="team-card__avatar" src="assets/img/team/lou-sanquini.jpg" alt="Lou Sanquini">
 ```
 
 The class already sets `aspect-ratio: 1`, `object-fit: cover` and the pill
-radius, so square-ish crops at 400×400 or larger just work.
+radius, so square crops at 400×400 or larger just work.
 
 **These are real people.** Their portraits must be actual photographs of them —
 never generated, never stock stand-ins.
 
+## 3. Logo
+
+The header wordmark is currently live text (navy + orange spans) with the dot
+arc drawn as inline SVG. That keeps it crisp at every size and themeable. If
+you would rather use the real logo file, drop in an SVG and replace the
+`.brand` anchor's contents.
+
 ## Formats
 
 Prefer `.webp` with a `.jpg` fallback via `<picture>` for anything large. Add
-`loading="lazy"` and `decoding="async"` to every image below the fold; leave
-the hero eager so it is not delayed.
+`loading="lazy"` and `decoding="async"` below the fold; the hero is already
+`fetchpriority="high"`.

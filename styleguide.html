@@ -9,7 +9,7 @@
 <script src="assets/js/theme-init.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/tokens.css">
 <link rel="stylesheet" href="assets/css/base.css">
 <link rel="stylesheet" href="assets/css/layout.css">
@@ -17,15 +17,15 @@
 <style>
   /* Specimen-page-only scaffolding. None of this ships on the real site. */
   .spec-note {
-    background: var(--clay-100);
-    color: var(--clay-600);
-    border: 1px solid var(--clay-400);
+    background: var(--orange-100);
+    color: var(--orange-700);
+    border: 1px solid var(--orange-400);
     border-radius: var(--radius);
     padding: var(--sp-4) var(--sp-5);
     font-size: var(--step--1);
   }
   :root[data-theme="dark"] .spec-note,
-  .spec-note { color: var(--clay-600); }
+  .spec-note { color: var(--orange-700); }
   .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr)); gap: var(--sp-3); }
   .swatch { border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--bg-raised); }
   .swatch__chip { height: 4.5rem; }
@@ -90,28 +90,37 @@
       <div class="stack">
         <p class="eyebrow">01 — Colour</p>
         <h2 class="measure">A restrained, clinical palette</h2>
-        <p class="lede">A deep teal-blue carries authority without the generic corporate blue. Warm neutrals keep the page reading as paper. One warm clay accent is held in reserve for emphasis — used sparingly, it stays loud.</p>
+        <p class="lede">Sampled from the client's logo: navy #283282 from the &ldquo;Tribeca&rdquo; wordmark, orange #fa7b24 from &ldquo;Outcomes&rdquo; and the dot arc. Orange measures 2.65:1 on white, so it is a graphic colour only — bullets, rules and dots, never text.</p>
       </div>
 
       <div class="stack stack--sm">
         <p class="spec-h">Brand ramp</p>
         <div class="swatches" data-reveal data-reveal-group>
-          <div class="swatch"><div class="swatch__chip" style="background:var(--ink-900)"></div><div class="swatch__meta"><span class="swatch__name">ink-900</span><br><span class="swatch__hex">#061620</span></div></div>
-          <div class="swatch"><div class="swatch__chip" style="background:var(--ink-800)"></div><div class="swatch__meta"><span class="swatch__name">ink-800</span><br><span class="swatch__hex">#0a1f2c</span></div></div>
-          <div class="swatch"><div class="swatch__chip" style="background:var(--ink-700)"></div><div class="swatch__meta"><span class="swatch__name">ink-700</span><br><span class="swatch__hex">#123a4d</span></div></div>
-          <div class="swatch"><div class="swatch__chip" style="background:var(--ink-600)"></div><div class="swatch__meta"><span class="swatch__name">ink-600</span><br><span class="swatch__hex">#1a5266</span></div></div>
-          <div class="swatch"><div class="swatch__chip" style="background:var(--ink-500)"></div><div class="swatch__meta"><span class="swatch__name">ink-500</span><br><span class="swatch__hex">#1c6e7e</span></div></div>
-          <div class="swatch"><div class="swatch__chip" style="background:var(--ink-400)"></div><div class="swatch__meta"><span class="swatch__name">ink-400</span><br><span class="swatch__hex">#3f909c</span></div></div>
-          <div class="swatch"><div class="swatch__chip" style="background:var(--ink-300)"></div><div class="swatch__meta"><span class="swatch__name">ink-300</span><br><span class="swatch__hex">#6fb3be</span></div></div>
-          <div class="swatch"><div class="swatch__chip" style="background:var(--ink-100)"></div><div class="swatch__meta"><span class="swatch__name">ink-100</span><br><span class="swatch__hex">#dceef0</span></div></div>
+          <div class="swatch"><div class="swatch__chip" style="background:var(--navy-900)"></div><div class="swatch__meta"><span class="swatch__name">navy-900</span><br><span class="swatch__hex">#0d1030</span></div></div>
+          <div class="swatch"><div class="swatch__chip" style="background:var(--navy-800)"></div><div class="swatch__meta"><span class="swatch__name">navy-800</span><br><span class="swatch__hex">#161c4e</span></div></div>
+          <div class="swatch"><div class="swatch__chip" style="background:var(--navy-700)"></div><div class="swatch__meta"><span class="swatch__name">navy-700</span><br><span class="swatch__hex">#1e2668</span></div></div>
+          <div class="swatch"><div class="swatch__chip" style="background:var(--navy-600)"></div><div class="swatch__meta"><span class="swatch__name">navy-600</span><br><span class="swatch__hex">#283282</span></div></div>
+          <div class="swatch"><div class="swatch__chip" style="background:var(--navy-500)"></div><div class="swatch__meta"><span class="swatch__name">navy-500</span><br><span class="swatch__hex">#3b47a2</span></div></div>
+          <div class="swatch"><div class="swatch__chip" style="background:var(--navy-400)"></div><div class="swatch__meta"><span class="swatch__name">navy-400</span><br><span class="swatch__hex">#5a67c0</span></div></div>
+          <div class="swatch"><div class="swatch__chip" style="background:var(--navy-300)"></div><div class="swatch__meta"><span class="swatch__name">navy-300</span><br><span class="swatch__hex">#8e97d8</span></div></div>
+          <div class="swatch"><div class="swatch__chip" style="background:var(--navy-100)"></div><div class="swatch__meta"><span class="swatch__name">navy-100</span><br><span class="swatch__hex">#dee2f5</span></div></div>
+        </div>
         </div>
       </div>
 
       <div class="stack stack--sm">
         <p class="spec-h">Accent &amp; neutrals</p>
         <div class="swatches">
-          <div class="swatch"><div class="swatch__chip" style="background:var(--clay-600)"></div><div class="swatch__meta"><span class="swatch__name">clay-600</span><br><span class="swatch__hex">#9e5228</span></div></div>
-          <div class="swatch"><div class="swatch__chip" style="background:var(--clay-500)"></div><div class="swatch__meta"><span class="swatch__name">clay-500</span><br><span class="swatch__hex">#c2703d</span></div></div>
+          <div class="swatch"><div class="swatch__chip" style="background:var(--orange-700)"></div><div class="swatch__meta"><span class="swatch__name">orange-700</span><br><span class="swatch__hex">#a84e13</span></div></div>
+          <div class="swatch"><div class="swatch__chip" style="background:var(--orange-600)"></div><div class="swatch__meta"><span class="swatch__name">orange-600</span><br><span class="swatch__hex">#c9611a</span></div></div>
+          <div class="swatch"><div class="swatch__chip" style="background:var(--orange-500)"></div><div class="swatch__meta"><span class="swatch__name">orange-500</span><br><span class="swatch__hex">#fa7b24</span></div></div>
+          <div class="swatch"><div class="swatch__chip" style="background:var(--orange-400)"></div><div class="swatch__meta"><span class="swatch__name">orange-400</span><br><span class="swatch__hex">#ff9b55</span></div></div>
+          <div class="swatch"><div class="swatch__chip" style="background:var(--paper-sunk)"></div><div class="swatch__meta"><span class="swatch__name">paper-sunk</span><br><span class="swatch__hex">#f5f6f8</span></div></div>
+          <div class="swatch"><div class="swatch__chip" style="background:var(--n-200)"></div><div class="swatch__meta"><span class="swatch__name">n-200</span><br><span class="swatch__hex">#dfe2e8</span></div></div>
+          <div class="swatch"><div class="swatch__chip" style="background:var(--n-500)"></div><div class="swatch__meta"><span class="swatch__name">n-500</span><br><span class="swatch__hex">#5a6070</span></div></div>
+          <div class="swatch"><div class="swatch__chip" style="background:var(--n-800)"></div><div class="swatch__meta"><span class="swatch__name">n-800</span><br><span class="swatch__hex">#14161a</span></div></div>
+        </div><div class="swatch__meta"><span class="swatch__name">clay-600</span><br><span class="swatch__hex">#9e5228</span></div></div>
+          <div class="swatch"><div class="swatch__chip" style="background:var(--orange-500)"></div><div class="swatch__meta"><span class="swatch__name">clay-500</span><br><span class="swatch__hex">#c2703d</span></div></div>
           <div class="swatch"><div class="swatch__chip" style="background:var(--paper)"></div><div class="swatch__meta"><span class="swatch__name">paper</span><br><span class="swatch__hex">#fbfaf8</span></div></div>
           <div class="swatch"><div class="swatch__chip" style="background:var(--n-200)"></div><div class="swatch__meta"><span class="swatch__name">n-200</span><br><span class="swatch__hex">#dcd9d2</span></div></div>
           <div class="swatch"><div class="swatch__chip" style="background:var(--n-500)"></div><div class="swatch__meta"><span class="swatch__name">n-500</span><br><span class="swatch__hex">#6f6a63</span></div></div>
@@ -119,7 +128,7 @@
         </div>
       </div>
 
-      <p class="text-muted measure">Every text/background pair in the system was measured: body copy on paper is <strong>15.2:1</strong>, muted text <strong>5.1:1</strong>, the smallest caption text <strong>4.9:1</strong>, and links <strong>5.6:1</strong>. All clear WCAG AA; body copy clears AAA. The dark palette clears AA throughout too. Hit the <em>Theme</em> button in the header to check the dark palette.</p>
+      <p class="text-muted measure">Measured, not estimated: body copy <strong>18.1:1</strong>, muted text <strong>6.3:1</strong>, smallest caption <strong>5.4:1</strong>, navy links <strong>11.2:1</strong>. Orange is excluded from text entirely at <strong>2.7:1</strong>; where words must be orange they use orange-700 at <strong>5.6:1</strong>. Hit the <em>Theme</em> button in the header to check the dark palette.</p>
     </div>
   </section>
 
@@ -128,8 +137,8 @@
     <div class="container stack stack--xl">
       <div class="stack">
         <p class="eyebrow">02 — Typography</p>
-        <h2 class="measure">Source Serif 4 for authority, Inter for clarity</h2>
-        <p class="lede">A serif headline signals research and publication; a neutral grotesk keeps dense body copy effortless. Every size is fluid — it interpolates between a 360px phone and a 1280px desktop, so nothing jumps at a breakpoint.</p>
+        <h2 class="measure">Inter throughout, as the live site uses</h2>
+        <p class="lede">The live site is sans-serif throughout, so the rebuild is too. Large section headings run at weight 500 and column headings at 700, matching the live hierarchy. Every size is fluid — it interpolates between a 360px phone and a 1280px desktop, so nothing jumps at a breakpoint.</p>
       </div>
 
       <div class="stack stack--sm">
@@ -265,7 +274,7 @@
   <!-- ============================ INVERSE BAND ============================ -->
   <section class="section section--inverse">
     <div class="container stack stack--lg">
-      <p class="eyebrow eyebrow--bare" style="color: var(--ink-300)">Inverse band</p>
+      <p class="eyebrow eyebrow--bare" style="color: var(--orange-400)">Inverse band</p>
       <h2 class="measure">Dark sections break up a long page</h2>
       <p class="lede">Stat rows, quotes and closing calls to action read well against the deep ink. Every token remaps automatically — nothing is hard-coded per section.</p>
       <div class="stat-row stat-row--ruled" data-reveal data-reveal-group>

@@ -24,7 +24,7 @@
 .section--inverse h3, .section--inverse h4 { color: var(--text-on-inverse); }
 .section--inverse .lede,
 .section--inverse .text-muted { color: var(--text-on-inverse-muted); }
-.section--inverse a { color: var(--ink-200); }
+.section--inverse a { color: var(--navy-200); }
 .section--inverse hr { border-color: var(--line-inverse); }
 
 /* Hairline between adjacent same-colour sections, so bands stay legible. */

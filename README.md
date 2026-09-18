@@ -78,25 +78,38 @@ Load order in every page: `tokens → base → layout → components`.
 
 ## Design decisions
 
-- **Type.** Source Serif 4 for headings (research/publication authority), Inter
-  for body (dense copy stays effortless). Sizes are fluid `clamp()` steps that
-  interpolate between a 360px and a 1280px viewport, so nothing jumps at a
-  breakpoint.
-- **Colour.** A deep teal-blue brand ramp instead of generic corporate blue,
-  on warm neutrals so the page reads as paper. A warm clay accent is held in
-  reserve for emphasis only.
-- **Contrast.** Every text/surface pair was measured. Body copy 15.2:1,
-  muted 5.1:1, smallest caption 4.9:1, links 5.6:1 — all past WCAG AA, body
-  past AAA. The dark palette clears AA throughout. `--n-400` is marked
-  decorative-only because it does not.
-- **Motion.** One scroll-reveal with a staggered group variant, plus small
-  hover transforms. Everything is disabled under
-  `prefers-reduced-motion: reduce`.
-- **No-JS.** Reveal transitions are scoped to a `.js` class that `site.js` sets
-  on `<html>`. If scripting is off or the file 404s, the class never lands and
-  every element renders at full opacity — content is never hidden behind JS.
-- **No build step.** Plain static HTML/CSS/JS, deployable to Netlify, Vercel,
-  Cloudflare Pages or GitHub Pages as-is.
+The first pass was built blind — the live site was unreachable and no
+screenshots had been supplied — so the palette and type were invented. Once
+screenshots arrived, the direction was corrected to match the real site:
+
+- **Colour.** Sampled from the logo, not guessed: navy `#283282` from the
+  "Tribeca" wordmark, orange `#fa7b24` from "Outcomes" and the dot arc.
+  Orange measures **2.65:1 on white**, so it is a graphic colour only —
+  bullets, rules, dots, never text. `--highlight-text` (`#a84e13`, 5.58:1)
+  exists for the cases where words must be orange.
+- **Type.** Inter throughout, because the live site is sans-serif throughout.
+  Large section headings at weight 500 and column headings at 700, matching
+  the live hierarchy. Sizes are fluid `clamp()` steps interpolating between a
+  360px and a 1280px viewport, so nothing jumps at a breakpoint.
+- **Hero.** Full-bleed aerial photograph of Lower Manhattan with a dark scrim
+  and white copy, as on the live site. The scrim is tuned so every hero text
+  block clears **6.7:1 at its worst pixel**.
+- **Navigation.** Home and Contact only, matching the live header.
+- **Contrast.** Measured across the palette: body 18.1:1, muted 6.3:1,
+  smallest caption 5.4:1, navy links 11.2:1. `--n-400` is marked
+  decorative-only because it fails as text.
+- **Motion.** One scroll reveal with a staggered group variant plus small
+  hover transforms, all disabled under `prefers-reduced-motion: reduce`.
+- **No-JS.** Reveal transitions are scoped to a `.js` class set by `site.js`.
+  If scripting is off the class never lands and everything renders at full
+  opacity — content is never hidden behind JS.
+- **No build step.** Plain static HTML/CSS/JS, deployable as-is.
+
+## Checks
+
+Four scripts under `tools/` guard the things that are easy to break silently —
+verbatim copy, dangling design tokens, hero contrast, form labelling. See
+`tools/README.md`. Run all four before pushing.
 
 ## Getting the content in
 

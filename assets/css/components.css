@@ -98,10 +98,10 @@
 
 .btn--on-dark {
   --btn-bg: #fff;
-  --btn-fg: var(--ink-900);
+  --btn-fg: var(--navy-900);
   --btn-border: #fff;
 }
-.btn--on-dark:hover { --btn-bg: var(--ink-100); --btn-border: var(--ink-100); }
+.btn--on-dark:hover { --btn-bg: var(--navy-100); --btn-border: var(--navy-100); }
 
 .btn--lg { padding: 0.95rem 2rem; font-size: var(--step-1); min-height: 3.25rem; }
 .btn--sm { padding: 0.5rem 1rem; font-size: var(--step--1); min-height: 2.25rem; }
@@ -677,3 +677,107 @@
 }
 .contact-detail__value a { color: inherit; text-decoration-color: color-mix(in oklab, var(--accent) 45%, transparent); }
 .contact-detail__value a:hover { color: var(--accent); }
+
+/* ==========================================================================
+   Matching the live site's structure
+   ========================================================================== */
+
+/* --- Logo: navy wordmark, orange second half, orange arc of dots --------- */
+.brand { position: relative; color: var(--navy-600); font-weight: 700; }
+.brand__accent { color: var(--orange-500); }
+:root[data-theme="dark"] .brand { color: #fff; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .brand { color: #fff; }
+}
+.brand__dots {
+  position: absolute;
+  top: -0.45em;
+  left: 52%;
+  width: 2.6em;
+  height: 0.8em;
+  overflow: visible;
+}
+.brand__dots circle { fill: var(--orange-500); }
+
+/* --- Hero over a photograph --------------------------------------------- */
+.hero--image {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: flex-end;
+  min-height: clamp(26rem, 20rem + 34vw, 44rem);
+  padding-block: var(--sp-9) var(--sp-8);
+  color: #fff;
+  overflow: hidden;
+}
+.hero--image::before { content: none; } /* drop the abstract wash */
+
+.hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+.hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+}
+/* Scrim: dark enough at the bottom-left for white text to clear AAA, while
+   the top of the photograph stays open. */
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(to top, rgba(6, 8, 24, 0.92) 0%, rgba(6, 8, 24, 0.66) 34%, rgba(6, 8, 24, 0.22) 68%, rgba(6, 8, 24, 0.30) 100%),
+    linear-gradient(to right, rgba(6, 8, 24, 0.60), rgba(6, 8, 24, 0) 65%);
+}
+
+.hero--image h1,
+.hero--image .hero__title { color: #fff; font-weight: var(--weight-bold); }
+.hero--image .lede { color: rgba(255, 255, 255, 0.88); }
+.hero--image .list-lead li { color: #fff; border-color: rgba(255, 255, 255, 0.22); }
+.hero--image .list-lead li:last-child { border-bottom-color: rgba(255, 255, 255, 0.22); }
+.hero--image .list-lead li::before { color: var(--orange-400); }
+.hero--image .eyebrow { color: var(--orange-400); }
+
+/* --- Bulleted list, as the live site uses ------------------------------- */
+.list-bullet {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.list-bullet li {
+  position: relative;
+  padding-left: 1.4em;
+  padding-block: var(--sp-2);
+  text-wrap: pretty;
+}
+.list-bullet li::before {
+  content: "";
+  position: absolute;
+  left: 0.15em;
+  top: 0.95em;
+  width: 0.42em;
+  height: 0.42em;
+  border-radius: 50%;
+  background: var(--highlight);
+}
+
+/* Column headings in the "who we work with" / "what we do" grids ---------- */
+.col-heading {
+  font-size: var(--step-2);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-snug);
+  margin-bottom: var(--sp-3);
+}
+
+/* Airier, borderless columns — the live site uses no card chrome. */
+.card--plain {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+.card--plain .list-rule li { border-top-color: transparent; padding-block: var(--sp-2); }
