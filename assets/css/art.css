@@ -191,3 +191,101 @@
   from { transform: scale(1.001); }
   to   { transform: scale(1.085); }
 }
+
+/* ==========================================================================
+   Motion pass 2. Same rules: inside prefers-reduced-motion: no-preference,
+   scoped to .js, nothing load-bearing for legibility.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+
+  /* --- Headings assemble word by word ------------------------------------ */
+  .js .split { perspective: 800px; }
+  .js .split .w {
+    display: inline-block;
+    opacity: 0;
+    transform: translate3d(0, 0.5em, 0) rotateX(-55deg);
+    transform-origin: 50% 100%;
+    transition: opacity 520ms var(--ease-out), transform 620ms var(--ease-out);
+    transition-delay: calc(var(--w, 0) * 65ms);
+  }
+  .js .split.is-visible .w { opacity: 1; transform: none; }
+
+  /* --- Buttons catch a sweep of light ------------------------------------ */
+  .btn { position: relative; overflow: hidden; }
+  .btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.42) 50%, transparent 65%);
+    transform: translateX(-120%);
+    transition: transform 720ms var(--ease-out);
+    pointer-events: none;
+  }
+  .btn:hover::after { transform: translateX(120%); }
+  .btn--secondary::after,
+  .btn--ghost::after { background: linear-gradient(105deg, transparent 35%, rgba(40,50,130,0.14) 50%, transparent 65%); }
+
+  /* --- Footer links draw an underline ------------------------------------ */
+  .site-footer a, .footer__list a {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 1px;
+    transition: background-size 380ms var(--ease-out), color var(--dur-fast) var(--ease-out);
+    text-decoration: none;
+  }
+  .site-footer a:hover, .footer__list a:hover {
+    background-size: 100% 1px;
+    text-decoration: none;
+  }
+
+  /* --- The question rules grow downward ----------------------------------- */
+  .js .question-list[data-reveal] > li {
+    border-left-color: transparent;
+    background-image: linear-gradient(var(--highlight), var(--highlight));
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-size: 2px 0%;
+    transition: opacity var(--dur-slow) var(--ease-out),
+                transform var(--dur-slow) var(--ease-out),
+                background-size 620ms var(--ease-out);
+  }
+  .js .question-list[data-reveal].is-visible > li {
+    background-size: 2px 100%;
+    transition-delay: calc(var(--i, 0) * 80ms);
+  }
+
+  /* --- Portraits tilt toward the pointer ---------------------------------- */
+  .team-card { perspective: 700px; }
+  .team-card__avatar {
+    transform: rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg));
+    transition: transform 240ms var(--ease-out), box-shadow var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out);
+    will-change: transform;
+  }
+  .team-card:hover .team-card__avatar { transition-duration: 90ms; }
+
+  /* --- The measurement grid twinkles -------------------------------------- */
+  .band-art circle { animation: twinkle 5.5s var(--ease-in-out) infinite; }
+  .band-art circle:nth-child(3n)  { animation-duration: 7.5s; animation-delay: -1.2s; }
+  .band-art circle:nth-child(4n)  { animation-duration: 9s;   animation-delay: -2.6s; }
+  .band-art circle:nth-child(5n)  { animation-duration: 6.5s; animation-delay: -3.9s; }
+  .band-art circle:nth-child(7n)  { animation-duration: 11s;  animation-delay: -0.6s; }
+
+  /* --- Hero parallax, driven from JS -------------------------------------- */
+  .js .hero__media { transform: translate3d(0, var(--par, 0px), 0); will-change: transform; }
+  .js .hero__body  { opacity: var(--heroFade, 1); }
+
+  /* --- Theme control pops when it changes --------------------------------- */
+  .theme-toggle.is-changing svg { animation: icon-pop 420ms var(--ease-out); }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.25; }
+  50%      { opacity: 1; }
+}
+@keyframes icon-pop {
+  0%   { transform: rotate(-90deg) scale(0.4); opacity: 0; }
+  60%  { transform: rotate(8deg) scale(1.12); opacity: 1; }
+  100% { transform: none; opacity: 1; }
+}

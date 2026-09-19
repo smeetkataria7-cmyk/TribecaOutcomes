@@ -22,6 +22,9 @@
     initReveal();
     initThemeToggle();
     initProgress();
+    initSplit();
+    initParallax();
+    initTilt();
     markCurrentNavLink();
   });
 
@@ -77,7 +80,7 @@
 
   /* --- Scroll reveal ----------------------------------------------------- */
   function initReveal() {
-    var items = document.querySelectorAll("[data-reveal]");
+    var items = document.querySelectorAll("[data-reveal], [data-split]");
     if (!items.length) return;
 
     // Index the children of each group so CSS can stagger them.
@@ -102,6 +105,92 @@
     }, { rootMargin: "0px 0px -10% 0px", threshold: 0.08 });
 
     items.forEach(function (el) { io.observe(el); });
+  }
+
+  function reduced() {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+
+  /* --- Split headings into words so they can assemble ---------------------- */
+  function initSplit() {
+    var els = document.querySelectorAll("[data-split]");
+    if (!els.length || reduced()) return;
+
+    els.forEach(function (el) {
+      // Capture the text exactly, then rebuild it. Whitespace runs are kept as
+      // their own text nodes, so the rendered string is byte-identical to the
+      // copy the client supplied — this must never paraphrase.
+      var parts = el.textContent.split(/(\s+)/);
+      var frag = document.createDocumentFragment();
+      var i = 0;
+      parts.forEach(function (part) {
+        if (part === "") return;
+        if (/^\s+$/.test(part)) {
+          frag.appendChild(document.createTextNode(part));
+          return;
+        }
+        var w = document.createElement("span");
+        w.className = "w";
+        w.style.setProperty("--w", i++);
+        w.textContent = part;
+        frag.appendChild(w);
+      });
+      el.textContent = "";
+      el.appendChild(frag);
+      el.classList.add("split");
+    });
+  }
+
+  /* --- Hero parallax ------------------------------------------------------- */
+  function initParallax() {
+    var hero = document.querySelector(".hero--image");
+    if (!hero || reduced()) return;
+    var media = hero.querySelector(".hero__media");
+    var body = hero.querySelector(".hero__body");
+    if (!media) return;
+
+    var ticking = false;
+    function update() {
+      ticking = false;
+      var h = hero.offsetHeight || 1;
+      var y = Math.min(window.scrollY, h);          // clamped: never runs away
+      media.style.setProperty("--par", (y * 0.26).toFixed(1) + "px");
+      if (body) {
+        var f = 1 - y / (h * 0.8);
+        body.style.setProperty("--heroFade", Math.max(0, Math.min(1, f)).toFixed(3));
+      }
+    }
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(update);
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    update();
+  }
+
+  /* --- Portraits tilt toward the pointer ----------------------------------- */
+  function initTilt() {
+    if (reduced()) return;
+    // Pointer tilt is meaningless on touch, and fine motor control is assumed.
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+
+    document.querySelectorAll(".team-card").forEach(function (card) {
+      var avatar = card.querySelector(".team-card__avatar");
+      if (!avatar) return;
+      card.addEventListener("pointermove", function (e) {
+        var r = avatar.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width - 0.5;
+        var py = (e.clientY - r.top) / r.height - 0.5;
+        avatar.style.setProperty("--ty", (px * 16).toFixed(2) + "deg");
+        avatar.style.setProperty("--tx", (-py * 16).toFixed(2) + "deg");
+      });
+      card.addEventListener("pointerleave", function () {
+        avatar.style.setProperty("--ty", "0deg");
+        avatar.style.setProperty("--tx", "0deg");
+      });
+    });
   }
 
   /* --- Scroll progress bar ------------------------------------------------ */
@@ -160,6 +249,11 @@
       else root.setAttribute("data-theme", mode);
 
       btn.setAttribute("data-mode", mode);
+      if (!reduced()) {
+        btn.classList.remove("is-changing");
+        void btn.offsetWidth;            // restart the animation
+        btn.classList.add("is-changing");
+      }
       var next = MODES[(MODES.indexOf(mode) + 1) % MODES.length];
       var shown = LABEL[mode] + (mode === "system" ? " (" + LABEL[effective(mode)] + ")" : "");
       btn.setAttribute("aria-label", "Theme: " + shown + ". Switch to " + LABEL[next] + ".");

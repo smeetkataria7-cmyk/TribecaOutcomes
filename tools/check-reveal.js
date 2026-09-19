@@ -17,6 +17,11 @@ const { chromium } = require('/opt/node22/lib/node_modules/playwright');
 
   const stuck = await p.evaluate(() => {
     const bad = [];
+    // Split headings assemble word by word; a stuck word is as bad as a
+    // stuck block, so every .w span is checked too.
+    document.querySelectorAll('.split .w').forEach(w => {
+      if (parseFloat(getComputedStyle(w).opacity) < 0.99) bad.push('word: ' + w.textContent);
+    });
     document.querySelectorAll('[data-reveal]').forEach(el => {
       const targets = el.hasAttribute('data-reveal-group') ? [...el.children] : [el];
       targets.forEach(t => {
@@ -35,7 +40,7 @@ const { chromium } = require('/opt/node22/lib/node_modules/playwright');
   await p2.goto('file://' + process.cwd() + '/index.html', { waitUntil: 'load' });
   const hidden = await p2.evaluate(() => {
     let n = 0;
-    document.querySelectorAll('[data-reveal], [data-reveal] > *').forEach(el => {
+    document.querySelectorAll('[data-reveal], [data-reveal] > *, [data-split], .split .w').forEach(el => {
       if (parseFloat(getComputedStyle(el).opacity) < 0.99) n++;
     });
     return n;

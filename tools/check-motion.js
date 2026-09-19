@@ -32,7 +32,7 @@ const scrollThrough = p => p.evaluate(async () => {
 
   const unsettled = await p.evaluate(() => {
     const bad = [];
-    const sel = '.reasons > li, .question-list > li, .team-grid > *, [data-reveal], [data-reveal] > *';
+    const sel = '.reasons > li, .question-list > li, .team-grid > *, [data-reveal], [data-reveal] > *, .split .w';
     document.querySelectorAll(sel).forEach(el => {
       const t = getComputedStyle(el).transform;
       if (t && t !== 'none' && t !== 'matrix(1, 0, 0, 1, 0, 0)') {
@@ -71,13 +71,16 @@ const scrollThrough = p => p.evaluate(async () => {
   await p.waitForTimeout(500);
 
   const reduced = await p.evaluate(() => {
-    const hidden = [...document.querySelectorAll('[data-reveal], [data-reveal] > *')]
+    const hidden = [...document.querySelectorAll('[data-reveal], [data-reveal] > *, [data-split]')]
       .filter(el => parseFloat(getComputedStyle(el).opacity) < 0.99).length;
+    // Under reduced motion the splitter must not run at all.
+    const wordSpans = document.querySelectorAll('.split .w').length;
     const heroImg = document.querySelector('.hero__media img');
     const anim = getComputedStyle(heroImg).animationName;
-    return { hidden, anim, bar: !!document.querySelector('[data-progress]') };
+    return { hidden, anim, wordSpans, bar: !!document.querySelector('[data-progress]') };
   });
   check('reduced motion: nothing hidden', reduced.hidden, 0);
+  check('reduced motion: headings are not word-split', reduced.wordSpans, 0);
   check('reduced motion: hero ken-burns disabled', reduced.anim, 'none');
   check('reduced motion: progress bar removed', reduced.bar, false);
   await ctx.close();
