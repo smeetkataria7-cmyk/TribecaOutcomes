@@ -474,15 +474,25 @@
    off or the bundle fails to load, the class is never added and every element
    renders at full opacity — content is never hidden behind JS. */
 @media (prefers-reduced-motion: no-preference) {
-  .js [data-reveal] {
+  /* A plain reveal animates the element itself. */
+  .js [data-reveal]:not([data-reveal-group]) {
     opacity: 0;
     transform: translateY(14px);
     transition: opacity var(--dur-slow) var(--ease-out),
                 transform var(--dur-slow) var(--ease-out);
   }
-  .js [data-reveal].is-visible { opacity: 1; transform: none; }
-  /* Stagger children of a revealed group. */
-  .js [data-reveal-group] > * { transition-delay: calc(var(--i, 0) * 70ms); }
+  .js [data-reveal]:not([data-reveal-group]).is-visible { opacity: 1; transform: none; }
+
+  /* A group reveal animates its CHILDREN in sequence. The container itself is
+     left alone — hiding both would double the fade, and a stagger delay on a
+     child that has no transition of its own does nothing at all. */
+  .js [data-reveal][data-reveal-group] > * {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity var(--dur-slow) var(--ease-out),
+                transform var(--dur-slow) var(--ease-out);
+  }
+  .js [data-reveal][data-reveal-group].is-visible > * { opacity: 1; transform: none; }
 }
 
 /* --- Lead list: the oversized, ruled service list in the hero ------------ */
@@ -825,3 +835,183 @@
 .theme-toggle[data-mode="light"]  .theme-toggle__icon--light { display: block; }
 .theme-toggle[data-mode="dark"]   .theme-toggle__icon { display: none; }
 .theme-toggle[data-mode="dark"]   .theme-toggle__icon--dark { display: block; }
+
+/* ==========================================================================
+   Revision pass
+   ========================================================================== */
+
+/* --- 1. Larger header logo ---------------------------------------------- */
+.brand {
+  font-size: clamp(1.35rem, 1.05rem + 1.1vw, 2rem);
+  line-height: 1;
+}
+.brand__dots {
+  top: -0.42em;
+  left: 53%;
+  width: 2.4em;
+  height: 0.75em;
+}
+.site-header__inner { min-height: 5.25rem; }
+
+/* --- 2. Home / Contact and the theme control together on the right ------ */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  margin-left: auto;
+}
+.header-right .nav { gap: var(--sp-4); }
+.nav__link { font-size: var(--step-0); }
+
+/* --- 3. Hero headline on a single line ---------------------------------- */
+/* 20.15 is the measured width of the string in Inter 700 (19.74em) plus a 2%
+   safety margin, so the size is derived from the text, not guessed. Below the
+   breakpoint it wraps normally rather than shrinking to nothing. */
+.hero--image .hero__title { font-size: var(--step-5); }
+@media (min-width: 48rem) {
+  .hero--image .hero__title {
+    white-space: nowrap;
+    /* 70rem, not 75rem: .container is border-box, so its 2.5rem gutters sit
+       INSIDE the 75rem cap and the usable content width is 70rem. */
+    font-size: min(calc((100vw - 5rem) / 20.15), calc(70rem / 20.15));
+  }
+}
+/* The headline now needs the full container, so the hero copy block does too. */
+.hero__body { max-width: none; }
+.hero__body .lede,
+.hero__body .list-lead { max-width: 52rem; }
+
+/* --- 4. Equal, top-aligned capability columns --------------------------- */
+.cols {
+  display: grid;
+  gap: var(--sp-6) var(--sp-7);
+  align-items: start;
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 40rem) { .cols { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 62rem) { .cols--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 62rem) { .cols--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Hairline between columns, on wide screens only. */
+@media (min-width: 62rem) {
+  .cols--ruled > * + * {
+    border-left: 1px solid var(--line);
+    padding-left: var(--sp-7);
+  }
+}
+.cols .col-heading {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: var(--sp-4);
+  padding-bottom: var(--sp-3);
+  border-bottom: 2px solid var(--highlight);
+  /* Fallback for browsers without subgrid: approximates two lines of heading
+     so the rules land close together even if not pixel-identical. */
+  min-height: 2.56em;
+}
+
+/* With subgrid, every column's heading occupies the SAME parent grid row, so
+   the rules align exactly however the text wraps — no magic height needed. */
+@media (min-width: 62rem) {
+  .cols--3, .cols--2 { grid-template-rows: auto auto; }
+  .cols--3 > *, .cols--2 > * {
+    display: grid;
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+    align-content: start;
+  }
+  @supports (grid-template-rows: subgrid) {
+    .cols .col-heading { min-height: 0; }
+  }
+}
+
+/* --- 5. "Why work with" as spaced numbered rows ------------------------- */
+.reasons {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: reason;
+}
+.reasons li {
+  counter-increment: reason;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--sp-4) var(--sp-5);
+  align-items: start;
+  padding-block: var(--sp-6);
+  border-top: 1px solid var(--line);
+}
+.reasons li:last-child { border-bottom: 1px solid var(--line); }
+@media (min-width: 48rem) {
+  .reasons li { gap: var(--sp-7); padding-block: var(--sp-7); }
+}
+.reasons li::before {
+  content: counter(reason, decimal-leading-zero);
+  font-size: var(--step-3);
+  font-weight: var(--weight-bold);
+  line-height: 1;
+  color: var(--highlight);
+  font-variant-numeric: tabular-nums;
+}
+.reasons__text {
+  font-size: var(--step-1);
+  line-height: var(--leading-normal);
+  max-width: 52ch;
+  text-wrap: pretty;
+}
+/* The row tints on hover, so the list feels alive without moving. */
+.reasons li {
+  transition: background-color var(--dur) var(--ease-out);
+  margin-inline: calc(var(--sp-4) * -1);
+  padding-inline: var(--sp-4);
+}
+.reasons li:hover { background: var(--accent-soft); }
+
+/* --- 6. All five people on one row -------------------------------------- */
+@media (min-width: 62rem) {
+  .team-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--sp-5); }
+}
+@media (min-width: 40rem) and (max-width: 61.99rem) {
+  .team-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.team-card__avatar {
+  max-width: clamp(4.5rem, 3rem + 5vw, 7rem);
+  font-size: var(--step-2);
+}
+.team-card__name { font-size: var(--step-1); }
+
+/* --- 7. Animation ------------------------------------------------------- */
+/* Hero copy rises in on load. Not observer-driven: it is above the fold. */
+@media (prefers-reduced-motion: no-preference) {
+  .js .hero__body > * {
+    animation: rise-in 720ms var(--ease-out) both;
+  }
+  .js .hero__body > *:nth-child(1) { animation-delay: 60ms; }
+  .js .hero__body > *:nth-child(2) { animation-delay: 170ms; }
+  .js .hero__body > *:nth-child(3) { animation-delay: 280ms; }
+  .js .hero__body > *:nth-child(4) { animation-delay: 390ms; }
+
+  /* Each row of a revealed list comes in behind the one above it. */
+  .js [data-reveal-group] > * { transition-delay: calc(var(--i, 0) * 80ms); }
+
+  /* The rule under a column heading draws itself in. */
+  .js [data-reveal] .col-heading { border-bottom-color: transparent; }
+  .js [data-reveal].is-visible .col-heading {
+    border-bottom-color: var(--highlight);
+    transition: border-bottom-color 600ms var(--ease-out) 260ms;
+  }
+}
+@keyframes rise-in {
+  from { opacity: 0; transform: translate3d(0, 18px, 0); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Cards and people lift slightly on hover. */
+.team-card { transition: transform var(--dur) var(--ease-out); }
+.team-card:hover { transform: translateY(-4px); }
+.team-card__avatar { transition: box-shadow var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out); }
+.team-card:hover .team-card__avatar {
+  border-color: var(--accent);
+  box-shadow: var(--shadow);
+}
