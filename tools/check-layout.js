@@ -50,6 +50,29 @@ const check = (n, got, want) => {
   check('nav sits in the right half', navRight.rightHalf, true);
   check('theme control is right-most', navRight.toggleLast, true);
 
+  // Logo: correct variant per theme, and the link keeps an accessible name.
+  for (const [mode, wantLight] of [['light', true], ['dark', false]]) {
+    await p.evaluate(m => document.documentElement.setAttribute('data-theme', m), mode);
+    await p.waitForTimeout(80);
+    const r = await p.evaluate(() => {
+      const a = document.querySelector('.brand');
+      const vis = sel => getComputedStyle(document.querySelector(sel)).display !== 'none';
+      const img = document.querySelector('.brand__img--light');
+      return {
+        light: vis('.brand__img--light'),
+        dark: vis('.brand__img--dark'),
+        name: (a.getAttribute('aria-label') || a.innerText || '').trim(),
+        loaded: img.naturalWidth > 0,
+        h: Math.round(document.querySelector('.brand').getBoundingClientRect().height),
+      };
+    });
+    check(`${mode} theme → shows the ${wantLight ? 'navy' : 'white'}-ink logo`, r.light, wantLight);
+    check(`${mode} theme → hides the ${wantLight ? 'white' : 'navy'}-ink logo`, r.dark, !wantLight);
+    check(`${mode} theme → logo has accessible name`, /TribecaOutcomes/.test(r.name), true);
+    check(`${mode} theme → logo file actually loaded`, r.loaded, true);
+  }
+  await p.evaluate(() => document.documentElement.removeAttribute('data-theme'));
+
   // Column heading rules must all land on the same y, whatever the wrap.
   for (const [label, sel] of [['who we work with', '#who-we-work-with'], ['what we do', '#what-we-do']]) {
     const ys = await p.evaluate((sel) =>

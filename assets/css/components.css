@@ -692,22 +692,6 @@
    Matching the live site's structure
    ========================================================================== */
 
-/* --- Logo: navy wordmark, orange second half, orange arc of dots --------- */
-.brand { position: relative; color: var(--navy-600); font-weight: 700; }
-.brand__accent { color: var(--orange-500); }
-:root[data-theme="dark"] .brand { color: #fff; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .brand { color: #fff; }
-}
-.brand__dots {
-  position: absolute;
-  top: -0.45em;
-  left: 52%;
-  width: 2.6em;
-  height: 0.8em;
-  overflow: visible;
-}
-.brand__dots circle { fill: var(--orange-500); }
 
 /* --- Hero over a photograph --------------------------------------------- */
 .hero--image {
@@ -840,17 +824,7 @@
    Revision pass
    ========================================================================== */
 
-/* --- 1. Larger header logo ---------------------------------------------- */
-.brand {
-  font-size: clamp(1.35rem, 1.05rem + 1.1vw, 2rem);
-  line-height: 1;
-}
-.brand__dots {
-  top: -0.42em;
-  left: 53%;
-  width: 2.4em;
-  height: 0.75em;
-}
+/* --- 1. Header logo (the real asset) ---------------------------------- */
 .site-header__inner { min-height: 5.25rem; }
 
 /* --- 2. Home / Contact and the theme control together on the right ------ */
@@ -1015,3 +989,33 @@
   border-color: var(--accent);
   box-shadow: var(--shadow);
 }
+
+/* --- Logo -------------------------------------------------------------- */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+  text-decoration: none;
+  flex: none;
+}
+.brand__img {
+  display: block;
+  width: auto;
+  height: clamp(2.1rem, 1.55rem + 2vw, 3.15rem);
+}
+/* Two files rather than a CSS filter: the navy has to become white while the
+   orange stays orange, which no single filter does cleanly. */
+.brand__img--dark { display: none; }
+
+:root[data-theme="dark"] .brand__img--light { display: none; }
+:root[data-theme="dark"] .brand__img--dark { display: block; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .brand__img--light { display: none; }
+  :root:not([data-theme="light"]) .brand__img--dark { display: block; }
+}
+
+/* The footer is dark in every theme, so it always takes the light-ink mark. */
+.site-footer .brand__img--light,
+.section--inverse .brand__img--light { display: none; }
+.site-footer .brand__img--dark,
+.section--inverse .brand__img--dark { display: block; }

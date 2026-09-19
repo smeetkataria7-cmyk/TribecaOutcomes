@@ -43,7 +43,25 @@ radius, so square crops at 400×400 or larger just work.
 **These are real people.** Their portraits must be actual photographs of them —
 never generated, never stock stand-ins.
 
-## 3. Logo
+## 3. Logo — DONE
+
+`logo.png` and `logo-on-dark.png` are derived from the supplied master
+(`1500x844`, transparent background) by `tools/` processing: cropped to the ink
+bounding box (`1391x259`, aspect 5.371) and exported at 700px wide, roughly 3x
+the largest rendered size.
+
+Two files rather than one plus a CSS filter, because the navy must become white
+while the orange stays orange — no single filter does that cleanly. The header
+swaps between them on theme; the footer always uses the light-ink version.
+
+Note the mark's actual construction, which is easy to get wrong: only the **O**
+of "Outcomes" is orange (the rest of the word is navy), and the arc above it is
+**five** dots of increasing size.
+
+To regenerate from a new master, point the processing script at it and re-run
+`node tools/check-logo.js`.
+
+## 3b. Superseded notes
 
 The header wordmark is currently live text (navy + orange spans) with the dot
 arc drawn as inline SVG. That keeps it crisp at every size and themeable. If
