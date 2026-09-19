@@ -781,3 +781,47 @@
   padding: 0;
 }
 .card--plain .list-rule li { border-top-color: transparent; padding-block: var(--sp-2); }
+
+/* --- Theme control: one button cycling System / Light / Dark ------------- */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out),
+              border-color var(--dur-fast) var(--ease-out),
+              background-color var(--dur-fast) var(--ease-out);
+}
+.theme-toggle:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.theme-toggle svg {
+  width: 1.125rem;
+  height: 1.125rem;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Show only the icon for the active mode. Defaults to the system icon so the
+   button is never blank in the moment before JS sets data-mode. */
+.theme-toggle__icon { display: none; }
+.theme-toggle__icon--system { display: block; }
+.theme-toggle[data-mode="system"] .theme-toggle__icon { display: none; }
+.theme-toggle[data-mode="system"] .theme-toggle__icon--system { display: block; }
+.theme-toggle[data-mode="light"]  .theme-toggle__icon { display: none; }
+.theme-toggle[data-mode="light"]  .theme-toggle__icon--light { display: block; }
+.theme-toggle[data-mode="dark"]   .theme-toggle__icon { display: none; }
+.theme-toggle[data-mode="dark"]   .theme-toggle__icon--dark { display: block; }

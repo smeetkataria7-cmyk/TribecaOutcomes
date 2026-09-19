@@ -103,25 +103,64 @@
     items.forEach(function (el) { io.observe(el); });
   }
 
-  /* --- Theme toggle ------------------------------------------------------ */
+  /* --- Theme control: System / Light / Dark ------------------------------ */
   function initThemeToggle() {
     var btn = document.querySelector("[data-theme-toggle]");
     if (!btn) return;
 
-    function current() {
-      return root.getAttribute("data-theme") ||
-        (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    var MODES = ["system", "light", "dark"];
+    var LABEL = { system: "System", light: "Light", dark: "Dark" };
+    var mq = window.matchMedia("(prefers-color-scheme: dark)");
+    var status = btn.querySelector("[data-theme-status]");
+
+    // "system" is stored as the absence of a key, so a visitor who never
+    // touches the control keeps following their OS forever.
+    function stored() {
+      try {
+        var v = localStorage.getItem("theme");
+        return v === "light" || v === "dark" ? v : "system";
+      } catch (e) { return "system"; }
     }
-    function apply(theme) {
-      root.setAttribute("data-theme", theme);
-      btn.setAttribute("aria-label", theme === "dark" ? "Switch to light theme" : "Switch to dark theme");
-      try { localStorage.setItem("theme", theme); } catch (e) { /* private mode */ }
+
+    function effective(mode) {
+      return mode === "system" ? (mq.matches ? "dark" : "light") : mode;
+    }
+
+    function render(mode) {
+      // Absence of the attribute is what hands control back to the media query.
+      if (mode === "system") root.removeAttribute("data-theme");
+      else root.setAttribute("data-theme", mode);
+
+      btn.setAttribute("data-mode", mode);
+      var next = MODES[(MODES.indexOf(mode) + 1) % MODES.length];
+      var shown = LABEL[mode] + (mode === "system" ? " (" + LABEL[effective(mode)] + ")" : "");
+      btn.setAttribute("aria-label", "Theme: " + shown + ". Switch to " + LABEL[next] + ".");
+      btn.setAttribute("title", "Theme: " + shown);
+      if (status) status.textContent = "Theme: " + shown;
+    }
+
+    function set(mode) {
+      try {
+        if (mode === "system") localStorage.removeItem("theme");
+        else localStorage.setItem("theme", mode);
+      } catch (e) { /* private mode: the choice just will not persist */ }
+      render(mode);
     }
 
     btn.addEventListener("click", function () {
-      apply(current() === "dark" ? "light" : "dark");
+      var m = stored();
+      set(MODES[(MODES.indexOf(m) + 1) % MODES.length]);
     });
-    apply(current());
+
+    // While on System, the OS can flip underneath us. The CSS follows on its
+    // own; this only keeps the button's label truthful.
+    var onScheme = function () { if (stored() === "system") render("system"); };
+    if (mq.addEventListener) mq.addEventListener("change", onScheme);
+    else if (mq.addListener) mq.addListener(onScheme);
+
+    // Render only — deliberately NOT set(), which would write a preference and
+    // pin the theme on a visitor's very first page load.
+    render(stored());
   }
 
   /* --- Current page in the nav ------------------------------------------- */

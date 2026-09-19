@@ -98,6 +98,12 @@ screenshots arrived, the direction was corrected to match the real site:
 - **Contrast.** Measured across the palette: body 18.1:1, muted 6.3:1,
   smallest caption 5.4:1, navy links 11.2:1. `--n-400` is marked
   decorative-only because it fails as text.
+- **Theme.** A single header control cycles **System → Light → Dark**.
+  System is the default and is stored as the *absence* of a preference, so a
+  visitor who never touches it keeps following their OS — including when the
+  OS flips while the page is open. Light and Dark are explicit overrides that
+  persist. `theme-init.js` runs inline in `<head>` so there is no flash of the
+  wrong scheme.
 - **Motion.** One scroll reveal with a staggered group variant plus small
   hover transforms, all disabled under `prefers-reduced-motion: reduce`.
 - **No-JS.** Reveal transitions are scoped to a `.js` class set by `site.js`.
@@ -107,9 +113,9 @@ screenshots arrived, the direction was corrected to match the real site:
 
 ## Checks
 
-Four scripts under `tools/` guard the things that are easy to break silently —
+Five scripts under `tools/` guard the things that are easy to break silently —
 verbatim copy, dangling design tokens, hero contrast, form labelling. See
-`tools/README.md`. Run all four before pushing.
+`tools/README.md`. Run all five before pushing.
 
 ## Getting the content in
 
