@@ -81,6 +81,38 @@ const check = (n, got, want) => {
     check(`${label}: column rules share one baseline (${ys.join(', ')})`, new Set(ys).size, 1);
   }
 
+  // Every column heading on exactly one line, and equal text-column widths.
+  for (const w of [1920, 1440, 1280, 1100, 992, 900, 768, 640, 500, 390]) {
+    await p.setViewportSize({ width: w, height: 900 });
+    await p.goto('file://' + process.cwd() + '/index.html', { waitUntil: 'load' });
+    await p.waitForTimeout(260);
+    const r = await p.evaluate(() => {
+      // Count rendered line boxes with a Range over the text itself. Deriving
+      // lines from element height / line-height counts padding as a line:
+      // a 12px padding-bottom against a 23px line reads as 1.52 -> "2 lines".
+      const lineCount = el => {
+        const r = document.createRange();
+        r.selectNodeContents(el);
+        return r.getClientRects().length || 1;
+      };
+      const out = [];
+      document.querySelectorAll('.cols').forEach(grid => {
+        const hs = [...grid.querySelectorAll('.col-heading')];
+        out.push({
+          lines: hs.map(lineCount),
+          clipped: hs.some(h => h.scrollWidth > Math.ceil(h.clientWidth) + 1),
+          widths: hs.map(h => Math.round(h.getBoundingClientRect().width)),
+        });
+      });
+      return out;
+    });
+    r.forEach((g, i) => {
+      check(`grid ${i + 1} headings on one line @ ${w}px [${g.lines}]`, g.lines.every(n => n === 1), true);
+      check(`grid ${i + 1} headings not clipped @ ${w}px`, g.clipped, false);
+      check(`grid ${i + 1} text columns equal @ ${w}px [${g.widths}]`, new Set(g.widths).size, 1);
+    });
+  }
+
   // No horizontal overflow anywhere.
   for (const w of [1920, 1440, 1024, 820, 600, 390, 360]) {
     await p.setViewportSize({ width: w, height: 900 });

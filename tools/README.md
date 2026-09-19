@@ -11,6 +11,7 @@ Run from the repo root. No dependencies beyond a global Playwright.
 | `node tools/check-layout.js` | The hero headline is exactly one line from 768px up and is never clipped, all five people sit on one row, the nav sits right of the logo with the theme control last, column rules share a baseline, and nothing overflows at seven widths. |
 | `node tools/check-reveal.js` | Scroll-reveal completes: every revealed element reaches full opacity after a scroll-through, and nothing is hidden with JavaScript disabled. |
 | `node tools/check-logo.js` | Both logo files have transparent corners, a mostly-transparent background, no opaque black rectangle, orange ink for the O and dots, wordmark ink in the right colour, the correct aspect ratio and a sane file size. |
+| `node tools/check-motion.js` | Motion settles and stays optional: nothing is left translated or scaled off its resting position after a scroll-through, the progress bar tracks scroll at both ends, and `prefers-reduced-motion: reduce` disables the ken-burns, removes the progress bar and hides nothing. |
 | `node tools/check-hero-contrast.js` | Renders the hero, hides the text, samples the pixels behind each text block and reports the **worst-case** white-on-photo contrast. Re-run this after swapping the hero image. |
 
-Run all eight before pushing.
+Run all nine before pushing.

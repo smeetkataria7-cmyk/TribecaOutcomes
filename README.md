@@ -113,9 +113,9 @@ screenshots arrived, the direction was corrected to match the real site:
 
 ## Checks
 
-Eight scripts under `tools/` guard the things that are easy to break silently —
+Nine scripts under `tools/` guard the things that are easy to break silently —
 verbatim copy, dangling design tokens, hero contrast, form labelling. See
-`tools/README.md`. Run all eight before pushing.
+`tools/README.md`. Run all nine before pushing.
 
 ## Getting the content in
 

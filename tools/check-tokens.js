@@ -15,11 +15,13 @@ const files = [];
 })('.');
 
 const tokensCss = fs.readFileSync('assets/css/tokens.css', 'utf8');
-const defined = new Set([...tokensCss.matchAll(/^\s*(--[\w-]+)\s*:/gm)].map(m => m[1]));
+// Anywhere, not just line-start: several declarations often share a line.
+const DECL = /(--[\w-]+)\s*:/g;
+const defined = new Set([...tokensCss.matchAll(DECL)].map(m => m[1]));
 
 // Locally-scoped custom properties, declared on a component rather than :root.
 for (const f of files) {
-  for (const m of fs.readFileSync(f, 'utf8').matchAll(/^\s*(--[\w-]+)\s*:/gm)) defined.add(m[1]);
+  for (const m of fs.readFileSync(f, 'utf8').matchAll(DECL)) defined.add(m[1]);
 }
 
 let bad = 0;

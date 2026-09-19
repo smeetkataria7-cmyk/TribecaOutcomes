@@ -866,22 +866,50 @@
 @media (min-width: 62rem) { .cols--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (min-width: 62rem) { .cols--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
-/* Hairline between columns, on wide screens only. */
+/* Hairline between columns, drawn INSIDE the gap by a pseudo-element.
+   A border plus padding-left on the item would shrink columns 2 and 3 by the
+   padding, leaving the text columns unequal (341 / 292 / 292 at 1440px). */
 @media (min-width: 62rem) {
-  .cols--ruled > * + * {
+  .cols--ruled > * + * { position: relative; }
+  .cols--ruled > * + *::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--sp-7) / -2);
     border-left: 1px solid var(--line);
-    padding-left: var(--sp-7);
   }
 }
+/* Column headings set on ONE line. The size is derived from the widest
+   heading in each grid and the width its column actually gets, so nothing
+   wraps at any viewport:
+     .cols--3  widest is "Clinical Development"     11.77em  -> 11.9 with margin
+     .cols--2  widest is "Outcomes and Commercial"  14.88em  -> 15.0 with margin
+   --col-w mirrors the real track width: the container is 94vw - 12.8px while
+   the gutter is still fluid, capped at 70rem of content, less the gaps. */
+.cols { --head-em: 12; --col-w: calc(94vw - 12.8px); }
+.cols--3 { --head-em: 11.9; }
+.cols--2 { --head-em: 15.0; }
+
+@media (min-width: 40rem) {
+  .cols { --col-w: calc((94vw - 60.8px) / 2); }
+}
+@media (min-width: 62rem) {
+  .cols--3 { --col-w: min(calc((94vw - 108.8px) / 3), calc((70rem - 96px) / 3)); }
+  .cols--2 { --col-w: min(calc((94vw - 60.8px) / 2), calc((70rem - 48px) / 2)); }
+}
+
 .cols .col-heading {
   display: flex;
   align-items: flex-end;
   margin-bottom: var(--sp-4);
   padding-bottom: var(--sp-3);
   border-bottom: 2px solid var(--highlight);
-  /* Fallback for browsers without subgrid: approximates two lines of heading
-     so the rules land close together even if not pixel-identical. */
-  min-height: 2.56em;
+  white-space: nowrap;
+  font-size: min(var(--step-2), calc(var(--col-w) / var(--head-em)));
+  /* Fallback for browsers without subgrid: approximates the heading box so the
+     rules land close together even if not pixel-identical. */
+  min-height: 1.4em;
 }
 
 /* With subgrid, every column's heading occupies the SAME parent grid row, so

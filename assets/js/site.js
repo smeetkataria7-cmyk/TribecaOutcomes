@@ -21,6 +21,7 @@
     initStickyHeader();
     initReveal();
     initThemeToggle();
+    initProgress();
     markCurrentNavLink();
   });
 
@@ -101,6 +102,33 @@
     }, { rootMargin: "0px 0px -10% 0px", threshold: 0.08 });
 
     items.forEach(function (el) { io.observe(el); });
+  }
+
+  /* --- Scroll progress bar ------------------------------------------------ */
+  function initProgress() {
+    var bar = document.querySelector("[data-progress]");
+    if (!bar) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      bar.remove();
+      return;
+    }
+
+    var ticking = false;
+    function update() {
+      ticking = false;
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      var p = max > 0 ? window.scrollY / max : 0;
+      bar.style.setProperty("--p", Math.min(1, Math.max(0, p)).toFixed(4));
+    }
+    // rAF-throttled: scroll fires far more often than the screen repaints.
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(update);
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    update();
   }
 
   /* --- Theme control: System / Light / Dark ------------------------------ */

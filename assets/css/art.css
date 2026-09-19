@@ -84,3 +84,110 @@
   aspect-ratio: 3 / 2;
 }
 .media-slot img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ==========================================================================
+   Motion pass. Everything here sits inside prefers-reduced-motion:
+   no-preference, and is scoped to .js so nothing depends on it to be legible.
+   ========================================================================== */
+
+/* --- Scroll progress bar ------------------------------------------------ */
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  height: 3px;
+  width: 100%;
+  transform: scaleX(var(--p, 0));
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--navy-500), var(--orange-500));
+  pointer-events: none;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) { .progress { display: none; } }
+
+@media (prefers-reduced-motion: no-preference) {
+
+  /* --- Hero photograph drifts slowly in ---------------------------------- */
+  .js .hero__media img {
+    animation: ken-burns 28s var(--ease-in-out) both;
+    transform-origin: 58% 45%;
+  }
+
+  /* --- Header condenses once the page scrolls ---------------------------- */
+  .site-header__inner,
+  .brand__img {
+    transition: min-height var(--dur) var(--ease-out),
+                height var(--dur) var(--ease-out);
+  }
+  .site-header.is-stuck .site-header__inner { min-height: 4.1rem; }
+  .site-header.is-stuck .brand__img { height: clamp(1.75rem, 1.3rem + 1.5vw, 2.5rem); }
+
+  /* --- Eyebrow rule draws itself in -------------------------------------- */
+  .js [data-reveal] .eyebrow::before {
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+  }
+  .js [data-reveal].is-visible .eyebrow::before {
+    transform: scaleX(1);
+    transition: transform 620ms var(--ease-out) 120ms;
+  }
+
+  /* --- "Why work with" rows arrive from the left ------------------------- */
+  .js .reasons[data-reveal] > li { transform: translate3d(-22px, 0, 0); }
+  .js .reasons[data-reveal].is-visible > li { transform: none; }
+  .js .reasons[data-reveal] > li::before {
+    transform: scale(0.6);
+    opacity: 0;
+    transition: transform 620ms var(--ease-out), opacity 460ms var(--ease-out);
+    transition-delay: calc(var(--i, 0) * 80ms + 140ms);
+  }
+  .js .reasons[data-reveal].is-visible > li::before { transform: none; opacity: 1; }
+
+  /* --- Questions arrive from the left, rule growing downward ------------- */
+  .js .question-list[data-reveal] > li { transform: translate3d(-26px, 0, 0); }
+  .js .question-list[data-reveal].is-visible > li { transform: none; }
+
+  /* --- People pop in ------------------------------------------------------ */
+  .js .team-grid[data-reveal] > * { transform: translate3d(0, 20px, 0) scale(0.94); }
+  .js .team-grid[data-reveal].is-visible > * { transform: none; }
+  .js .team-grid[data-reveal] > * { transition-timing-function: cubic-bezier(0.34, 1.4, 0.5, 1); }
+
+  /* --- Bullets pop as their row lands ------------------------------------ */
+  .js [data-reveal] .list-bullet li::before {
+    transform: scale(0);
+    transition: transform 420ms cubic-bezier(0.34, 1.6, 0.5, 1);
+  }
+  .js [data-reveal].is-visible .list-bullet li::before { transform: none; }
+  .js [data-reveal] .list-bullet li:nth-child(n)::before { transition-delay: 220ms; }
+  .js [data-reveal] .list-bullet li:nth-child(2)::before { transition-delay: 280ms; }
+  .js [data-reveal] .list-bullet li:nth-child(3)::before { transition-delay: 340ms; }
+  .js [data-reveal] .list-bullet li:nth-child(4)::before { transition-delay: 400ms; }
+  .js [data-reveal] .list-bullet li:nth-child(5)::before { transition-delay: 460ms; }
+  .js [data-reveal] .list-bullet li:nth-child(6)::before { transition-delay: 520ms; }
+  .js [data-reveal] .list-bullet li:nth-child(7)::before { transition-delay: 580ms; }
+
+  /* --- Column rules sweep out from the left ------------------------------ */
+  .js [data-reveal] .col-heading { border-bottom-color: transparent; }
+  .js [data-reveal].is-visible .col-heading {
+    border-bottom-color: var(--highlight);
+    transition: border-bottom-color 520ms var(--ease-out) 240ms;
+  }
+
+  /* --- Logo lifts on hover ------------------------------------------------ */
+  .brand { transition: transform var(--dur) var(--ease-out); }
+  .brand:hover { transform: translateY(-2px); }
+
+  /* --- Nav underline already grows; add a gentle lift --------------------- */
+  .nav__link { transition: color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out); }
+  .nav__link:hover { transform: translateY(-1px); }
+
+  /* --- Theme control rotates as it cycles --------------------------------- */
+  .theme-toggle svg { transition: transform 420ms var(--ease-out); }
+  .theme-toggle:hover svg { transform: rotate(18deg) scale(1.08); }
+}
+
+@keyframes ken-burns {
+  from { transform: scale(1.001); }
+  to   { transform: scale(1.085); }
+}
