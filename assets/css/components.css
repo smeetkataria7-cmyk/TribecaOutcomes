@@ -1047,3 +1047,99 @@
 .section--inverse .brand__img--light { display: none; }
 .site-footer .brand__img--dark,
 .section--inverse .brand__img--dark { display: block; }
+
+/* ==========================================================================
+   Hero rework: copy block up top, services as tiles across the bottom
+   ========================================================================== */
+
+.hero--image {
+  align-items: stretch;
+  min-height: clamp(34rem, 26rem + 26vw, 50rem);
+  padding-block: clamp(5rem, 3.5rem + 7vw, 9rem) clamp(2.5rem, 1.5rem + 3vw, 4rem);
+}
+.hero__inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: clamp(2.5rem, 1.5rem + 4vw, 5rem);
+}
+.hero__body .lede { max-width: 46rem; font-size: var(--step-1); }
+
+/* A deeper, more even scrim: the old one left the upper right of the
+   photograph bright while the copy sat over the dark lower left. */
+.hero__scrim {
+  background:
+    linear-gradient(to top, rgba(6, 8, 24, 0.94) 0%, rgba(6, 8, 24, 0.78) 30%, rgba(6, 8, 24, 0.52) 62%, rgba(6, 8, 24, 0.44) 100%),
+    linear-gradient(to right, rgba(6, 8, 24, 0.66), rgba(6, 8, 24, 0.12) 72%);
+}
+
+/* --- Service tiles ------------------------------------------------------- */
+.hero-tiles {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: tile;
+  display: grid;
+  gap: var(--sp-4);
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 40rem) {
+  .hero-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* Only once tiles sit side by side do they need a shared floor; on a
+     single column it just pads short items with dead space. */
+  .hero-tiles li { min-height: 8.5rem; }
+}
+@media (min-width: 64rem) { .hero-tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-5); } }
+
+.hero-tiles li {
+  counter-increment: tile;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-5);
+  color: #fff;
+  font-size: var(--step-1);
+  font-weight: 500;
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-snug);
+  text-wrap: pretty;
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  border-radius: var(--radius-lg);
+  background: rgba(8, 10, 30, 0.46);
+  backdrop-filter: blur(12px) saturate(1.25);
+  -webkit-backdrop-filter: blur(12px) saturate(1.25);
+  overflow: hidden;
+}
+.hero-tiles li::before {
+  content: counter(tile, decimal-leading-zero);
+  font-size: var(--step-0);
+  font-weight: 700;
+  letter-spacing: var(--tracking-wide);
+  color: var(--orange-400);
+  font-variant-numeric: tabular-nums;
+}
+/* Accent bar across the top, drawn in on hover. */
+.hero-tiles li::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: var(--orange-500);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero-tiles li {
+    transition: transform var(--dur) var(--ease-out),
+                background-color var(--dur) var(--ease-out),
+                border-color var(--dur) var(--ease-out);
+  }
+  .hero-tiles li::after { transition: transform 460ms var(--ease-out); }
+}
+.hero-tiles li:hover {
+  transform: translateY(-5px);
+  background: rgba(8, 10, 30, 0.66);
+  border-color: rgba(255, 255, 255, 0.34);
+}
+.hero-tiles li:hover::after { transform: none; }

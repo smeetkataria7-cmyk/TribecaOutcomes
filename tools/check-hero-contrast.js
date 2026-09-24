@@ -8,7 +8,7 @@ const { chromium } = require('/opt/node22/lib/node_modules/playwright');
 
   // Boxes of the white text we care about.
   const boxes = await p.evaluate(() => {
-    const sel = ['.hero--image .hero__title', '.hero--image .list-lead li', '.hero--image .lede'];
+    const sel = ['.hero--image .hero__title', '.hero--image .lede', '.hero-tiles li'];
     const out = [];
     sel.forEach(s => document.querySelectorAll(s).forEach(el => {
       const r = el.getBoundingClientRect();
@@ -20,7 +20,14 @@ const { chromium } = require('/opt/node22/lib/node_modules/playwright');
 
   // Hide the text, keep photo + scrim, then sample what sits behind it.
   await p.evaluate(() => {
-    document.querySelectorAll('.hero--image .container').forEach(e => e.style.visibility = 'hidden');
+    // Hide the TEXT only. The tiles carry their own translucent panel, which is
+    // part of the background the text actually sits on, so it must stay.
+    document.querySelectorAll('.hero__body, .hero-tiles li').forEach(e => { e.style.color = 'transparent'; });
+    document.querySelectorAll('.hero__body *').forEach(e => { e.style.color = 'transparent'; });
+    document.querySelectorAll('.hero-tiles li::before');
+    const st = document.createElement('style');
+    st.textContent = '.hero-tiles li::before{color:transparent !important}.hero__body .btn{opacity:0}';
+    document.head.appendChild(st);
   });
   const shot = await p.screenshot({ clip: { x: 0, y: 0, width: 1440, height: 900 } });
   const bg = 'data:image/png;base64,' + shot.toString('base64');
